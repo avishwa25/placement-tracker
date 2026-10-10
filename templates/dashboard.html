@@ -1,4 +1,29 @@
 {% extends "base.html" %} {% block content %}
 <h2>Welcome, {{ session.student_name }}</h2>
-<p>Your dashboard will appear here.</p>
+
+<div style="display: flex; gap: 16px; margin: 16px 0">
+  <div style="border: 1px solid #ccc; padding: 12px 20px">
+    <div>Total applications</div>
+    <strong id="card-total" style="font-size: 24px">0</strong>
+  </div>
+  <div style="border: 1px solid #ccc; padding: 12px 20px">
+    <div>Interviews</div>
+    <strong id="card-interview" style="font-size: 24px">0</strong>
+  </div>
+  <div style="border: 1px solid #ccc; padding: 12px 20px">
+    <div>Offers</div>
+    <strong id="card-offer" style="font-size: 24px">0</strong>
+  </div>
+</div>
+
+<p id="empty-msg" style="display: none">
+  No applications yet. Add one on the Applications page to see your chart.
+</p>
+
+<div style="max-width: 360px">
+  <canvas id="status-chart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}

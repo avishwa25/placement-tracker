@@ -10,4 +10,4 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_NAME = os.getenv("DB_NAME")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
-DB_PORT = int(os.getenv("DB_PORT", "22721"))
+DB_PORT = int(os.getenv("DB_PORT", "3306"))  # Default MySQL port is 3306

@@ -2,7 +2,7 @@
 
 A full-stack web app where students track their job applications in one place, see their progress on a dashboard, get AI-generated resume tips, and export their list as a PDF.
 
-**Live demo:** ADD-LINK-AFTER-DEPLOYMENT
+**Live demo:** [ADD-LINK-AFTER-DEPLOYMENT](https://placement-tracker-8rat.onrender.com/login)
 (The free host sleeps when idle, so the first load can take 30 to 60 seconds. The AI feature may occasionally be unavailable when the Gemini free tier is busy.)
 
 ## Features
@@ -72,4 +72,4 @@ A full-stack web app where students track their job applications in one place, s
 
 ## Author
 
-YOUR NAME, [GitHub](https://github.com/avishwa25)
+Avinash G K, [GitHub](https://github.com/avishwa25)

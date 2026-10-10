@@ -24,6 +24,20 @@
   <canvas id="status-chart"></canvas>
 </div>
 
+<h3>AI resume tips</h3>
+<input
+  id="tip-role"
+  placeholder="Target role (e.g. Python developer)"
+  maxlength="80"
+/>
+<input
+  id="tip-skills"
+  placeholder="Your skills (e.g. Flask, MySQL, JS)"
+  maxlength="300"
+/>
+<button id="tip-btn">Get tips</button>
+<p id="tip-result" style="white-space: pre-wrap"></p>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}

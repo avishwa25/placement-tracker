@@ -212,5 +212,22 @@ def stats():
     conn.close()
     return jsonify(counts)
 
+from ai_helper import get_resume_tip
+@app.route("/api/resume-tip", methods=["POST"])
+@login_required
+def resume_tip():
+    data = request.get_json(silent=True) or {}
+    role = (data.get("role") or "").strip()[:80]
+    skills = (data.get("skills") or "").strip()[:300]
+    if not role or not skills:
+        return jsonify({"error": "Enter a role and your skills."}), 400
+
+    try:
+        tip = get_resume_tip(role, skills)
+    except Exception as e:
+        print("Gemini error:", e)
+        return jsonify({"error": "The AI service is unavailable or the free limit was reached. Try again later."}), 503
+    return jsonify({"tip": tip})
+
 if __name__ == "__main__":
     app.run(debug=True) 

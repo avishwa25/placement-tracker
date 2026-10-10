@@ -1,0 +1,30 @@
+{% extends "base.html" %} {% block content %}
+<h2>My Applications</h2>
+
+<form id="add-form">
+  <input id="company" placeholder="Company" required />
+  <input id="role" placeholder="Job role" required />
+  <input id="link" placeholder="Job link (optional)" />
+  <input id="notes" placeholder="Notes (optional)" />
+  <button type="submit">Add</button>
+</form>
+
+<table border="1" cellpadding="6">
+  <thead>
+    <tr>
+      <th>Company</th>
+      <th>Role</th>
+      <th>Applied on</th>
+      <th>Status</th>
+      <th>Notes</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="app-body"></tbody>
+</table>
+
+<script>
+  const STATUSES = {{ statuses | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/applications.js') }}"></script>
+{% endblock %}

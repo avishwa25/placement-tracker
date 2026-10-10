@@ -7,6 +7,7 @@
     <nav>
       {% if session.student_id %}
       <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('applications_page') }}">Applications</a>
       <a href="{{ url_for('logout') }}">Logout</a>
       {% else %}
       <a href="{{ url_for('login') }}">Login</a>

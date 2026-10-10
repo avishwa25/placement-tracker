@@ -227,7 +227,7 @@ def resume_tip():
         tip = get_resume_tip(role, skills)
     except Exception as e:
         print("Gemini error:", e)
-        return jsonify({"error": "The AI service is unavailable or the free limit was reached. Try again later."}), 503
+        return jsonify({"error": "The AI service is busy right now. Please try again in a minute."}), 503
     return jsonify({"tip": tip})
 @app.route("/export/pdf")
 @login_required

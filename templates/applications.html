@@ -10,19 +10,17 @@
   <button type="submit">Add</button>
 </form>
 
-<table border="1" cellpadding="6">
-  <thead>
-    <tr>
-      <th>Company</th>
-      <th>Role</th>
-      <th>Applied on</th>
-      <th>Status</th>
-      <th>Notes</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="app-body"></tbody>
-</table>
+<ul id="applications-list">
+  {% for app in applications %}
+  <li data-id="{{ app.id }}">
+    <span class="status">{{ app.status }}</span>
+    <strong>{{ app.company }}</strong> - {{ app.role }}
+    {% if app.link %}<a href="{{ app.link }}" target="_blank">[link]</a>{% endif %}
+    {% if app.notes %}<em>({{ app.notes }})</em>{% endif %}
+    <button class="delete-btn">Delete</button>
+  </li>
+  {% endfor %}
+</ul>
 
 <script>
   const STATUSES = {{ statuses | tojson }};

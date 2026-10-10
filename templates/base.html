@@ -1,21 +1,28 @@
-<!doctype html>
-<html>
-  <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Placement Tracker</title>
-  </head>
-  <body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
     <nav>
-      {% if session.student_id %}
-      <a href="{{ url_for('dashboard') }}">Dashboard</a>
-      <a href="{{ url_for('applications_page') }}">Applications</a>
-      <a href="{{ url_for('logout') }}">Logout</a>
-      {% else %}
-      <a href="{{ url_for('login') }}">Login</a>
-      <a href="{{ url_for('register') }}">Register</a>
-      {% endif %}
+        <span class="brand">Placement Tracker</span>
+        {% if session.student_id %}
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('applications_page') }}">Applications</a>
+            <a href="{{ url_for('logout') }}" class="right">Logout</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}">Register</a>
+        {% endif %}
     </nav>
-    {% with messages = get_flashed_messages() %} {% for m in messages %}
-    <p>{{ m }}</p>
-    {% endfor %} {% endwith %} {% block content %}{% endblock %}
-  </body>
+    <main>
+        {% with messages = get_flashed_messages() %}
+            {% for m in messages %}<p class="flash">{{ m }}</p>{% endfor %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
 </html>

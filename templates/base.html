@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Placement Tracker</title>
+  </head>
+  <body>
+    <nav>
+      {% if session.student_id %}
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+      {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('register') }}">Register</a>
+      {% endif %}
+    </nav>
+    {% with messages = get_flashed_messages() %} {% for m in messages %}
+    <p>{{ m }}</p>
+    {% endfor %} {% endwith %} {% block content %}{% endblock %}
+  </body>
+</html>

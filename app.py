@@ -1,11 +1,12 @@
 from functools import wraps
 
-from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, send_file
 from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
 from datetime import date
 import config
 from db import get_connection
+from pdf_export import build_applications_pdf
 
 app = Flask(__name__)
 app.secret_key = config.SECRET_KEY
@@ -228,6 +229,27 @@ def resume_tip():
         print("Gemini error:", e)
         return jsonify({"error": "The AI service is unavailable or the free limit was reached. Try again later."}), 503
     return jsonify({"tip": tip})
+@app.route("/export/pdf")
+@login_required
+def export_pdf():
+    conn = get_connection()
+    cur = conn.cursor(dictionary=True)
+    cur.execute(
+        "SELECT company_name, job_role, status, applied_on, notes "
+        "FROM applications WHERE student_id = %s ORDER BY id DESC",
+        (session["student_id"],),
+    )
+    rows = [row_to_dict(r) for r in cur.fetchall()]
+    cur.close()
+    conn.close()
+
+    buffer = build_applications_pdf(session["student_name"], rows)
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name="applications.pdf",
+        mimetype="application/pdf",
+    )
 
 if __name__ == "__main__":
-    app.run(debug=True) 
+    app.run(debug=True)

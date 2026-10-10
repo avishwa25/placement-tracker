@@ -1,5 +1,6 @@
 {% extends "base.html" %} {% block content %}
 <h2>My Applications</h2>
+<p><a href="{{ url_for('export_pdf') }}">Download as PDF</a></p>
 
 <form id="add-form">
   <input id="company" placeholder="Company" required />

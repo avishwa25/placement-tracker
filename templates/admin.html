@@ -1,0 +1,79 @@
+{% extends "base.html" %} {% block content %}
+<h2>Admin overview</h2>
+
+<div style="display: flex; gap: 16px; flex-wrap: wrap; margin: 16px 0">
+  <div
+    style="
+      background: #fff;
+      border: 1px solid #dde;
+      padding: 12px 20px;
+      border-radius: 8px;
+    "
+  >
+    <div>Registered users</div>
+    <strong style="font-size: 24px">{{ total_users }}</strong>
+  </div>
+  <div
+    style="
+      background: #fff;
+      border: 1px solid #dde;
+      padding: 12px 20px;
+      border-radius: 8px;
+    "
+  >
+    <div>New users (7 days)</div>
+    <strong style="font-size: 24px">{{ new_users }}</strong>
+  </div>
+  <div
+    style="
+      background: #fff;
+      border: 1px solid #dde;
+      padding: 12px 20px;
+      border-radius: 8px;
+    "
+  >
+    <div>Total applications</div>
+    <strong style="font-size: 24px">{{ total_apps }}</strong>
+  </div>
+</div>
+
+<h3>Applications by status</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th>Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for status, n in by_status.items() %}
+    <tr>
+      <td>{{ status }}</td>
+      <td>{{ n }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h3>Signups per day (last 14 days with signups)</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>New users</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for s in signups %}
+    <tr>
+      <td>{{ s.day }}</td>
+      <td>{{ s.n }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="2">No signups yet.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

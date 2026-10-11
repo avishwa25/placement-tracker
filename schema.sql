@@ -20,3 +20,5 @@ CREATE TABLE applications (
     notes TEXT,
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 );
+
+ALTER TABLE students ADD COLUMN is_admin BOOLEAN NOT NULL DEFAULT FALSE;

@@ -28,4 +28,5 @@
   const STATUSES = {{ statuses | tojson }};
 </script>
 <script src="{{ url_for('static', filename='js/applications.js') }}"></script>
-{% endblock %}
+{% if session.is_admin %}<a href="{{ url_for('admin_page') }}">Admin</a>{% endif
+%} {% endblock %}

@@ -3,12 +3,9 @@
 <form method="POST">
   <input name="name" placeholder="Name" required /><br />
   <input name="email" type="email" placeholder="Email" required /><br />
-  <input
-    name="password"
-    type="password"
-    placeholder="Password (min 6)"
-    required
-  /><br />
+  
+<input name="password" type="password" placeholder="Password" required><br>
+<small>At least 8 characters, with uppercase, lowercase, a number and a symbol.</small><br>
   <button type="submit">Create account</button>
 </form>
 {% endblock %}

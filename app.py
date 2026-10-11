@@ -3,6 +3,7 @@ from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, send_file
 from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
+import re
 from datetime import date
 import config
 from db import get_connection
@@ -20,6 +21,29 @@ def login_required(f):
         return f(*args, **kwargs)
     return wrapper
 
+def password_error(pw):
+    if len(pw) < 8:
+        return "Password must be at least 8 characters."
+    if not re.search(r"[A-Z]", pw):
+        return "Password needs at least one uppercase letter."
+    if not re.search(r"[a-z]", pw):
+        return "Password needs at least one lowercase letter."
+    if not re.search(r"[0-9]", pw):
+        return "Password needs at least one number."
+    if not re.search(r"[^A-Za-z0-9]", pw):
+        return "Password needs at least one symbol, like ! @ # $."
+    return None
+
+
+def admin_required(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if "student_id" not in session:
+            return redirect(url_for("login"))
+        if not session.get("is_admin"):
+            return "Forbidden", 403
+        return f(*args, **kwargs)
+    return wrapper
 
 @app.route("/")
 def home():
@@ -35,10 +59,15 @@ def register():
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
 
-        if not name or not email or len(password) < 6:
-            flash("Fill all fields. Password must be at least 6 characters.")
+        if not name or not email:
+            flash("Fill all fields.")
             return render_template("register.html")
 
+        error = password_error(password)
+        if error:
+            flash(error)
+            return render_template("register.html")
+        
         conn = get_connection()
         cur = conn.cursor()
         try:
@@ -76,6 +105,7 @@ def login():
         if student and check_password_hash(student["password_hash"], password):
             session["student_id"] = student["id"]
             session["student_name"] = student["name"]
+            session["is_admin"] = bool(student["is_admin"])
             return redirect(url_for("dashboard"))
 
         flash("Wrong email or password.")
@@ -249,6 +279,46 @@ def export_pdf():
         as_attachment=True,
         download_name="applications.pdf",
         mimetype="application/pdf",
+    )
+
+@app.route("/admin")
+@admin_required
+def admin_page():
+    conn = get_connection()
+    cur = conn.cursor(dictionary=True)
+
+    cur.execute("SELECT COUNT(*) AS n FROM students")
+    total_users = cur.fetchone()["n"]
+
+    cur.execute("SELECT COUNT(*) AS n FROM applications")
+    total_apps = cur.fetchone()["n"]
+
+    cur.execute(
+        "SELECT COUNT(*) AS n FROM students "
+        "WHERE created_at >= NOW() - INTERVAL 7 DAY"
+    )
+    new_users = cur.fetchone()["n"]
+
+    cur.execute("SELECT status, COUNT(*) AS n FROM applications GROUP BY status")
+    by_status = {s: 0 for s in STATUSES}
+    for r in cur.fetchall():
+        by_status[r["status"]] = r["n"]
+
+    cur.execute(
+        "SELECT DATE(created_at) AS day, COUNT(*) AS n FROM students "
+        "GROUP BY DATE(created_at) ORDER BY day DESC LIMIT 14"
+    )
+    signups = cur.fetchall()
+
+    cur.close()
+    conn.close()
+    return render_template(
+        "admin.html",
+        total_users=total_users,
+        total_apps=total_apps,
+        new_users=new_users,
+        by_status=by_status,
+        signups=signups,
     )
 
 if __name__ == "__main__":
